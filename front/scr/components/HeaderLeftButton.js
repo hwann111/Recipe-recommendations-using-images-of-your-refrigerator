@@ -1,0 +1,25 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import PropTypes from 'prop-types';
+
+const HeaderLeftButton = ({ canGoback, tintColor }) => {
+  const navigation = useNavigation();
+
+  if (!canGoback) {
+    return null;
+  }
+
+  return (
+    <Pressable onPress={navigation.goBack} hitSlop={10}>
+      <MaterialCommunityIcons name="chevron-left" size={30} color={tintColor} />
+    </Pressable>
+  );
+};
+
+HeaderLeftButton.propTypes = {
+  canGoback: PropTypes.bool,
+  tintColor: PropTypes.string,
+};
+
+export default HeaderLeftButton;
