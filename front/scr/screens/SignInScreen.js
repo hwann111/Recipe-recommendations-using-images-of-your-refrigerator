@@ -11,6 +11,10 @@ import { signIn } from '../api/auth';
 import PropTypes from 'prop-types';
 import { PRIMARY } from '../color';
 import { useUserContext } from '../contexts/UserContext';
+import TextButton from '../components/TextButton';
+import { useNavigation } from '@react-navigation/native';
+import { AuthRoutes } from '../navigations/routes';
+import HR from '../components/HR';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
@@ -19,6 +23,7 @@ const SignInScreen = () => {
   const [disabled, setdisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const { setUser } = useUserContext();
+  const navigation = useNavigation();
 
   useEffect(() => {
     setdisabled(!email || !password);
@@ -78,6 +83,13 @@ const SignInScreen = () => {
             isLoading={isLoading}
           />
         </View>
+
+        <HR text={'OR'} styles={{ container: { marginVertical: 30 } }} />
+
+        <TextButton
+          title={'회원가입'}
+          onPress={() => navigation.navigate(AuthRoutes.SIGN_UP)}
+        />
       </View>
     </SafeInputView>
   );

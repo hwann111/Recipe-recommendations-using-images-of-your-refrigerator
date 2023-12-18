@@ -7,8 +7,8 @@ const HeaderRightButton = ({ tintColor }) => {
   const navigation = useNavigation();
 
   return (
-    <Pressable onPress={() => navigation.navigate('Settings')} hitSlop={10}>
-      <MaterialCommunityIcons name="cog" size={20} color={tintColor} />
+    <Pressable onPress={() => navigation.navigate('Camera')} hitSlop={10}>
+      <MaterialCommunityIcons name="camera" size={20} color={tintColor} />
     </Pressable>
   );
 };

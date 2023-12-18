@@ -1,9 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ListScreen from '../screens/ListScreen';
 import { PRIMARY, WHITE } from '../color';
 import HeaderLeftButton from '../components/HeaderLeftButton';
 import HeaderRightButton from '../components/HeaderRightButton';
-import SettingsScreen from '../screens/SettingsScreen';
+import StartScreen from '../screens/StartScreen';
+import ImageButton from '../components/ImageButton';
+import OpenCamera from '../screens/OpenCamera';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,14 +22,14 @@ const MainStack = () => {
       }}
     >
       <Stack.Screen
-        name="List"
-        component={ListScreen}
+        name="Start"
+        component={StartScreen}
         options={{
-          title: 'LIST',
+          title: 'Start',
           headerRight: HeaderRightButton,
         }}
       />
-      <Stack.Screen name="Settings" component={SettingsScreen} />
+      <Stack.Screen name="Camera" component={OpenCamera} />
     </Stack.Navigator>
   );
 };

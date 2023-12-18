@@ -12,6 +12,8 @@ const ListScreen = () => {
 
   const { getItem, setItem } = useAsyncStorage('todos');
 
+
+  //여기에서 재료 리스트 저장
   const save = async (data) => {
     try {
       await setItem(JSON.stringify(data));
@@ -20,7 +22,7 @@ const ListScreen = () => {
       Alert.alert('저장하기 실패', '데이터 저장에 실패했습니다.');
     }
   };
-
+//여기에서 재료 리스트 불러오기
   const load = async () => {
     try {
       const data = await getItem();
