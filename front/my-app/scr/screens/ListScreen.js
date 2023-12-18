@@ -1,31 +1,74 @@
-import { memo } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { Alert, View } from 'react-native';
+import EmptyList from '../components/EmptyList';
+import List from '../components/List';
+import InputFAB from '../components/InputFAB';
+import { useEffect, useState } from 'react';
+import { nanoid } from 'nanoid';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 const ListScreen = () => {
-  const todos = [];
-  for (let i = 1; i < 501; i++) {
-    todos.push({ value: i });
-  }
+  const [todos, setTodos] = useState([]);
+  const [isBottom, setIsBottom] = useState(false);
+
+  const { getItem, setItem } = useAsyncStorage('todos');
+
+  const save = async (data) => {
+    try {
+      await setItem(JSON.stringify(data));
+      setTodos(data);
+    } catch (e) {
+      Alert.alert('저장하기 실패', '데이터 저장에 실패했습니다.');
+    }
+  };
+
+  const load = async () => {
+    try {
+      const data = await getItem();
+      const todos = JSON.parse(data || '[]');
+      setTodos(todos);
+    } catch (e) {
+      Alert.alert('불러오기 실패', '데이터 불러오기에 실패했습니다');
+    }
+  };
+
+  useEffect(() => {
+    load();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onInsert = (task) => {
+    const id = nanoid(); //타임스탬프를 id 값으로 받음
+    const newTodos = [{ id, task, isDone: true }, ...todos];
+    save(newTodos);
+  };
+
+  const onDelete = (id) => {
+    const newTodos = todos.filter((item) => item.id !== id);
+    save(newTodos);
+  };
+
+  const onToggle = (id) => {
+    const newTodos = todos.map((item) =>
+      item.id === id ? { ...item, isDone: !item.isDone } : item
+    );
+    save(newTodos);
+  };
+
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={todos}
-        renderItem={({ item }) => {
-          return (
-            <View style={{ paddingVertical: 10, paddingHorizontal: 20 }}>
-              <Text style={{ fontSize: 20 }}>{item.value}</Text>
-            </View>
-          );
-        }}
-      />
+    <View style={{ flex: 1 }}>
+      {todos.length ? (
+        <List
+          data={todos}
+          setIsBottom={setIsBottom}
+          onDelete={onDelete}
+          onToggle={onToggle}
+        />
+      ) : (
+        <EmptyList />
+      )}
+      <InputFAB onInsert={onInsert} isBottom={isBottom} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default ListScreen;
